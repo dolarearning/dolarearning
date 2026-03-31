@@ -443,6 +443,13 @@ body {
   <div class="circle" onclick="openTransactions()">📄</div>
   <p id="menu_tx">İşlemler</p>
 </div>
+<div class="menu-item">
+  <div class="circle" onclick="openTelegram()">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" 
+         style="width:28px; height:28px;">
+  </div>
+  <p>Telegram</p>
+</div>
 
   <!-- 📊 MARKET داخل نفس الكارد -->
   <div class="market">
@@ -735,6 +742,9 @@ showLive();
 
 // كل 3 ثواني
 setInterval(showLive, 3000);
+function openTelegram(){
+  window.open("https://t.me/dolarwealth", "_blank");
+}
 </script>
 
 
@@ -781,5 +791,6 @@ setInterval(showLive, 3000);
 <div class="live-box">
   <div id="liveWithdraw"></div>
 </div>
+
 </body>
 </html>
