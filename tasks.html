@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tasks</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: white;
+}
+
+/* CARD */
+.card {
+  margin: 15px;
+  padding: 20px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #1e293b, #334155);
+  box-shadow: 0 0 20px rgba(0,255,200,0.2);
+}
+
+/* BALANCE BOX */
+.balance-box {
+  text-align: center;
+  padding: 15px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.05);
+  margin: 15px 0;
+}
+
+.balance-box h1 {
+  margin: 0;
+}
+
+/* PROGRESS */
+.progress {
+  height: 6px;
+  background: #1e293b;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #00ff88;
+  border-radius: 10px;
+}
+
+/* INFO */
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+/* BUTTON */
+.btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 15px;
+  background: #ff5a1f;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* NAV */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  background: #020617;
+}
+
+.nav-item {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  color: #aaa;
+}
+
+.nav-item.active {
+  color: orange;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <h3 id="title">Experience Project</h3>
+
+  <div class="balance-box">
+    <h1>$0.0000</h1>
+    <p>USDT</p>
+  </div>
+
+  <p id="progressText">نسبة التقدم (24 ساعة)</p>
+
+  <div class="progress">
+    <div class="progress-bar"></div>
+  </div>
+
+  <p>24h</p>
+
+  <div class="info">
+    <span id="vipText">VIP</span>
+    <span>0</span>
+  </div>
+
+  <div class="info">
+    <span id="powerText">قوة التعدين</span>
+    <span>GH/s 0.00</span>
+  </div>
+
+  <div class="info">
+    <span id="incomeText">الدخل اليومي</span>
+    <span>$0.00</span>
+  </div>
+
+  <button class="btn" onclick="goDeposit()" id="btnText">
+    تحسين قوة السحوبات
+  </button>
+
+</div>
+
+<!-- NAV -->
+
+
+  <div class="bottom-nav">
+
+  <div class="nav-item active" onclick="window.location.href='dashboard.html'">
+    <span>🏠</span>
+    <p id="nav_home">Ev</p>
+  </div>
+
+  <div class="nav-item" onclick="window.location.href='vip.html'">
+    <span>👑</span>
+    <p id="nav_vip">VIP</p>
+  </div>
+
+  <div class="nav-item" onclick="window.location.href='tasks.html'">
+    <span>📊</span>
+    <p id="nav_task">Görev</p>
+  </div>
+
+  <div class="nav-item" onclick="window.location.href='profile.html'">
+  <span>👤</span>
+  <p id="nav_profile">Ben</p>
+</div>
+
+</div>
+
+ 
+
+  
+
+<script>
+function goDeposit(){
+  window.location.href = "deposit.html";
+}
+
+const translations = {
+  tr: {
+    title: "Deneyim Projesi",
+    progress: "İlerleme (24 saat)",
+    vip: "VIP",
+    power: "Madencilik Gücü",
+    income: "Günlük Kazanç",
+    btn: "Gücü Artır",
+    nav_home: "Ev",
+    nav_vip: "VIP",
+    nav_task: "Görev",
+    nav_team: "Takım",
+    nav_profile: "Ben"
+  },
+  ar: {
+    title: "مشروع الخبرة",
+    progress: "نسبة التقدم (24 ساعة)",
+    vip: "المستوى",
+    power: "قوة التعدين",
+    income: "الدخل اليومي",
+    btn: "تحسين قوة السحوبات",
+    nav_home: "الرئيسية",
+    nav_vip: "VIP",
+    nav_task: "تجمع التعدين",
+    nav_team: "الفريق",
+    nav_profile: "أنا"
+  },
+  en: {
+    title: "Experience Project",
+    progress: "Progress (24h)",
+    vip: "VIP",
+    power: "Mining Power",
+    income: "Daily Income",
+    btn: "Upgrade Power",
+    nav_home: "Home",
+    nav_vip: "VIP",
+    nav_task: "Tasks",
+    nav_team: "Team",
+    nav_profile: "Me"
+  }
+};
+
+function applyLang(lang){
+  let t = translations[lang];
+  if(!t) return;
+
+  document.getElementById("title").innerText = t.title;
+  document.getElementById("progressText").innerText = t.progress;
+  document.getElementById("vipText").innerText = t.vip;
+  document.getElementById("powerText").innerText = t.power;
+  document.getElementById("incomeText").innerText = t.income;
+  document.getElementById("btnText").innerText = t.btn;
+
+  document.getElementById("nav_home").innerText = t.nav_home;
+  document.getElementById("nav_vip").innerText = t.nav_vip;
+  document.getElementById("nav_task").innerText = t.nav_task;
+  let el = document.getElementById("nav_team");
+if(el) el.innerText = t.nav_team;
+  document.getElementById("nav_profile").innerText = t.nav_profile;
+}
+
+window.onload = function(){
+  let lang = localStorage.getItem("lang") || "tr";
+  applyLang(lang);
+}
+</script>
+<script src="common.js"></script>
+</body>
+</html>
