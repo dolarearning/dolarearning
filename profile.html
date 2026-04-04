@@ -112,43 +112,39 @@ body {
 
 <script>
 window.onload = function(){
-  document.getElementById("email").innerText =
-    localStorage.getItem("email");
 
-  document.getElementById("userId").innerText =
-    localStorage.getItem("userId");
-
-  document.getElementById("balance").innerText =
-    localStorage.getItem("balance") || 0;
-}
-
-function logout(){
-  window.location.href = "index.html";
-}
-window.onload = function(){
+  // 🔥 المستخدم الحالي
   let currentUser = localStorage.getItem("currentUser");
-let users = JSON.parse(localStorage.getItem("users")) || [];
+  let users = JSON.parse(localStorage.getItem("users")) || [];
 
-let user = users.find(u => u.email === currentUser);
+  let user = users.find(u => u.email === currentUser);
 
-if(user){
-  document.getElementById("email").innerText = user.email;
-  document.getElementById("userId").innerText = user.id;
-  document.getElementById("balance").innerText = user.balance;
-}
-  let userId = localStorage.getItem("userId");
-
-  document.getElementById("email").innerText = localStorage.getItem("email");
-
-  if(userId){
-    document.getElementById("userId").innerText = userId;
+  // ✅ عرض البيانات الصحيحة
+  if(user){
+    document.getElementById("email").innerText = user.email;
+    document.getElementById("userId").innerText = user.id;
+    document.getElementById("balance").innerText = user.balance || 0;
   } else {
-    document.getElementById("userId").innerText = "—";
+    document.getElementById("email").innerText = "No user";
+    document.getElementById("userId").innerText = "-";
+    document.getElementById("balance").innerText = "0";
   }
 
-  document.getElementById("balance").innerText =
-    localStorage.getItem("balance") || 0;
+  // 🌐 اللغة
+  let lang = localStorage.getItem("lang") || "tr";
+  applyLang(lang);
 }
+
+
+// 🔓 تسجيل خروج حقيقي
+function logout(){
+  localStorage.removeItem("currentUser");
+  localStorage.removeItem("userId");
+  window.location.href = "index.html";
+}
+
+
+// 🌐 ترجمة
 const translations = {
   tr: {
     balance: "Toplam bakiye (USDT)",
@@ -175,6 +171,7 @@ const translations = {
     nav_profile: "Me"
   }
 };
+
 function applyLang(lang){
   let t = translations[lang];
   if(!t) return;
@@ -186,19 +183,6 @@ function applyLang(lang){
   document.getElementById("nav_vip").innerText = t.nav_vip;
   document.getElementById("nav_task").innerText = t.nav_task;
   document.getElementById("nav_profile").innerText = t.nav_profile;
-}
-window.onload = function(){
-  let lang = localStorage.getItem("lang") || "tr";
-  applyLang(lang);
-
-  document.getElementById("email").innerText =
-    localStorage.getItem("email");
-
-  document.getElementById("userId").innerText =
-    localStorage.getItem("userId");
-
-  document.getElementById("balance").innerText =
-    localStorage.getItem("balance") || 0;
 }
 </script>
 <div class="bottom-nav">

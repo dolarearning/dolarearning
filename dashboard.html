@@ -419,7 +419,7 @@ body {
 
   <!-- 💰 BALANCE -->
   <div class="balance">
-    <span id="balanceText">Balance</span> | <span>$0.00</span>
+    <span id="balanceText">Balance</span> | <span id="balance">$0</span>
   </div>
 
   <!-- 🔘 MENU -->
@@ -439,10 +439,7 @@ body {
       <p>Şirket</p>
     </div>
   </div>
-  <div class="menu-item">
-  <div class="circle" onclick="openTransactions()">📄</div>
-  <p id="menu_tx">İşlemler</p>
-</div>
+  
 <div class="menu-item">
   <div class="circle" onclick="openTelegram()">
     <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" 
@@ -505,7 +502,7 @@ body {
     nav_task: "Görev",
     nav_team: "Takım",
     nav_profile: "Ben",
-    menu: ["Yükle","Çek","Şirket","İşlemler"],
+    menu: ["Yükle","Çek","Şirket","İletişim"],
     balance: "Balance",
     no_tx: "Henüz işlem yok"
   },
@@ -516,7 +513,7 @@ body {
     nav_task: "تجمع التعدين",
     nav_team: "الفريق",
     nav_profile: "أنا",
-    menu: ["إيداع","سحب","شركة","المعاملات"],
+    menu: ["إيداع","سحب","شركة","تواصل"],
     balance: "اجمالي الأصول",
     no_tx: "لا يوجد أي معاملة لحد الآن"
   },
@@ -527,7 +524,7 @@ body {
     nav_task: "Tasks",
     nav_team: "Team",
     nav_profile: "Me",
-    menu: ["Deposit","Withdraw","Company","Transactions"],
+    menu: ["Deposit","Withdraw","Company","Contact"],
     balance: "Balance",
     no_tx: "No transactions yet"
   }
@@ -539,28 +536,12 @@ body {
   function goBack(){
   window.history.back();
 }
+let balance = localStorage.getItem("balance");
   function openWithdraw(){
-  
-  let t = translations[localStorage.getItem("lang") || "tr"];
-
-  document.getElementById("withdrawText").innerText =
-    t.withdraw_error;
-
-  document.getElementById("withdrawPopup").style.display = "flex";
+  window.location.href = "withdraw.html";
 }
 
-function closePopup(){
-  document.getElementById("withdrawPopup").style.display = "none";
-}
 
-document.addEventListener("click", function(e){
-  let popup = document.getElementById("withdrawPopup");
-  let box = document.querySelector(".popup-box");
-
-  if(e.target === popup){
-    closePopup();
-  }
-});
   function openDeposit(){
   window.location.href = "deposit.html";
 }
@@ -575,43 +556,10 @@ navItems.forEach(item => {
 });
   
  
-window.onload = function(){
-  let currentUser = localStorage.getItem("currentUser");
-let users = JSON.parse(localStorage.getItem("users")) || [];
 
-let user = users.find(u => u.email === currentUser);
 
-if (user) {
-  document.getElementById("userEmail").innerText = user.email;
-}
-  let userId = localStorage.getItem("userId");  // 🔥 جديد
 
-  if(email){
-    document.getElementById("userEmail").innerText = email;
-  } else {
-    document.getElementById("userEmail").innerText = "No Email";
-  }
 
-  // 🔥 عرض الـ ID
-  if(userId){
-    document.getElementById("userId").innerText = userId;
-  }
-
-  let lang = localStorage.getItem("lang") || "tr";
-  applyLang(lang);
-}
-
-/* 🌐 MENU */
-function toggleLang(){
-  let menu = document.getElementById("langMenu");
-  menu.style.display =
-    menu.style.display === "block" ? "none" : "block";
-}
-
-function setLang(lang){
-  localStorage.setItem("lang", lang);
-  applyLang(lang);
-}
 
 
 
@@ -679,20 +627,7 @@ function applyLang(lang){
 
 
 
-function openCompany(){
-  window.location.href = "company.html";
-}
-function openTransactions(){
-  let lang = localStorage.getItem("lang") || "tr";
-  let t = translations[lang];
 
-  document.getElementById("txText").innerText = t.no_tx;
-  document.getElementById("txPopup").style.display = "flex";
-}
-
-function closeTx(){
-  document.getElementById("txPopup").style.display = "none";
-}
 const fakeData = [];
 
 // 🔥 توليد 50 عملية وهمية
@@ -745,6 +680,7 @@ setInterval(showLive, 3000);
 function openTelegram(){
   window.open("https://t.me/dolarwealth", "_blank");
 }
+
 </script>
 
 
@@ -776,21 +712,65 @@ function openTelegram(){
 </div>
 
 </div>
-<div id="withdrawPopup" class="popup">
-  <div class="popup-box">
-    <span class="close" onclick="closePopup()">✖</span>
-    <p id="withdrawText"></p>
-  </div>
-</div>
-<div id="txPopup" class="popup">
-  <div class="popup-box">
-    <span class="close" onclick="closeTx()">✖</span>
-    <p id="txText"></p>
-  </div>
-</div>
+
+
 <div class="live-box">
   <div id="liveWithdraw"></div>
 </div>
+<script>
+const API = "https://your-link.onrender.com";
+
+let index = 0;
+
+window.addEventListener("load", function(){
+
+  let userId = localStorage.getItem("userId");
+
+  if(!userId){
+    alert("Giriş yok ❌");
+    window.location.href = "login.html";
+    return;
+  }
+
+  fetch(API + "/user/" + userId)
+  .then(res => res.json())
+  .then(user => {
+
+    if(!user || user.error){
+      alert("Kullanıcı bulunamadı ❌");
+      return;
+    }
+
+    let emailEl = document.getElementById("userEmail");
+    if(emailEl) emailEl.innerText = user.email;
+
+    let balanceEl = document.getElementById("balance");
+    if(balanceEl) balanceEl.innerText = "$" + (user.balance || 0);
+
+  });
+
+  let lang = localStorage.getItem("lang") || "tr";
+  applyLang(lang);
+
+});
+
+function toggleLang(){
+  let menu = document.getElementById("langMenu");
+  if(menu){
+    menu.style.display =
+      menu.style.display === "block" ? "none" : "block";
+  }
+}
+
+function setLang(lang){
+  localStorage.setItem("lang", lang);
+  applyLang(lang);
+}
+
+function openTelegram(){
+  window.open("https://t.me/dolarwealth", "_blank");
+}
+</script>
 
 </body>
 </html>

@@ -1,4 +1,7 @@
-// 🔥 KAYIT
+// 🌐 رابط السيرفر
+const API = "http://localhost:3000";
+
+// 🔥 تسجيل
 function register() {
   const email = document.getElementById("email").value.trim().toLowerCase();
   const password = document.getElementById("password").value;
@@ -13,52 +16,54 @@ function register() {
     return;
   }
 
-  let users = JSON.parse(localStorage.getItem("users")) || [];
-
-  // email var mı
-  let exists = users.some(u => u.email === email);
-  if (exists) {
-    alert("Bu email zaten kayıtlı ❌");
-    return;
-  }
-
-  let lastId = localStorage.getItem("lastUserId");
-  if (!lastId) lastId = 200500;
-  else lastId = Number(lastId) + 1;
-
-  let newUser = {
-    email: email,
-    password: password,
-    id: lastId,
-    balance: 0
-  };
-
-  users.push(newUser);
-
-  localStorage.setItem("users", JSON.stringify(users));
-  localStorage.setItem("lastUserId", lastId);
-
-  alert("Kayıt başarılı!");
-  window.location.href = "login.html";
+  fetch(API + "/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      alert("Bu email zaten kayıtlı ❌");
+    } else {
+      alert("Kayıt başarılı ✅");
+      window.location.href = "login.html";
+    }
+  });
 }
 
 
-// 🔥 GİRİŞ
+// 🔥 تسجيل دخول
 function login() {
   const email = document.getElementById("loginEmail").value.trim().toLowerCase();
   const password = document.getElementById("loginPassword").value;
 
-  let users = JSON.parse(localStorage.getItem("users")) || [];
+  fetch(API + "/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      alert("Email veya şifre yanlış ❌");
+    } else {
+      // 🔥 حفظ بيانات المستخدم
+      localStorage.setItem("userId", data.id);
+      localStorage.setItem("userEmail", data.email);
 
-  let user = users.find(u => u.email === email && u.password === password);
-
-  if (user) {
-    localStorage.setItem("currentUser", user.email);
-    localStorage.setItem("userId", user.id);
-
-    alert("Giriş başarılı!");
-    window.location.href = "dashboard.html";
-  } else {
-    alert("Email veya şifre yanlış ❌");
-  }
+      alert("Giriş başarılı ✅");
+      window.location.href = "dashboard.html";
+    }
+  });
 }
